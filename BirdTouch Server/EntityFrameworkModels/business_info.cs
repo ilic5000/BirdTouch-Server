@@ -21,7 +21,5 @@ namespace BirdTouch_Server.EntityFrameworkModels
         public string website { get; set; }
         public string adress { get; set; }
         public byte[] profilepicturedata { get; set; }
-    
-        public virtual users users { get; set; }
     }
 }

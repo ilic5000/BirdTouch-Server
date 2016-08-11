@@ -78,7 +78,6 @@
           <Property Name="website" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="profilepicturedata" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="users" Relationship="Self.FK_business_info_users" FromRole="business_info" ToRole="users" />
         </EntityType>
         <EntityType Name="user_info">
           <Key>
@@ -104,28 +103,11 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="username" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="business_info" Relationship="BirdTouchDatabaseModelSQLServer.FK_business_info_users" FromRole="users" ToRole="business_info" />
         </EntityType>
-        <Association Name="FK_business_info_users">
-          <End Role="users" Type="Self.users" Multiplicity="1" />
-          <End Role="business_info" Type="Self.business_info" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="business_info">
-              <PropertyRef Name="id_business_owner" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="birdtouchEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="business_info" EntityType="Self.business_info" />
           <EntitySet Name="user_info" EntityType="Self.user_info" />
           <EntitySet Name="users" EntityType="Self.users" />
-          <AssociationSet Name="FK_business_info_users" Association="Self.FK_business_info_users">
-            <End Role="users" EntitySet="users" />
-            <End Role="business_info" EntitySet="business_info" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace BirdTouch_Server.Models
 {
-    public class User
+    public class UserEncodedImage
     {
 
         public int Id { get; set; }
@@ -19,15 +19,7 @@ namespace BirdTouch_Server.Models
         public string DateOfBirth { get; set; }
         public string Adress { get; set; }
 
-        public byte[] ProfilePictureData { get; set; }
-
-        //public String ProfilePictureDataEncoded64
-        //{
-        //    get
-        //    {
-        //        return Convert.ToBase64String(ProfilePictureData);
-        //    }
-        //}
+        public String ProfilePictureDataEncoded { get; set; }
 
         public string FbLink { get; set; }
 

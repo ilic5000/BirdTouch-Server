@@ -17,7 +17,5 @@ namespace BirdTouch_Server.EntityFrameworkModels
         public int id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
-    
-        public virtual business_info business_info { get; set; }
     }
 }

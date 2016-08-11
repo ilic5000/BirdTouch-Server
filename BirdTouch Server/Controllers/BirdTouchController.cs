@@ -39,7 +39,7 @@ namespace BirdTouch_Server.Controllers
                                              PhoneNumber = sa.phoneNumber,
                                              DateOfBirth = sa.dateOfBirth,
                                              Adress = sa.adress,
-                                             ProfilPictureData = sa.profilePictureData,
+                                             ProfilePictureData = sa.profilePictureData,
                                              FbLink = sa.fbLink,
                                              TwitterLink = sa.twLink,
                                              GPlusLink = sa.gPlusLink,
@@ -78,7 +78,7 @@ namespace BirdTouch_Server.Controllers
                                              PhoneNumber = sa.phoneNumber,
                                              DateOfBirth = sa.dateOfBirth,
                                              Adress = sa.adress,
-                                             ProfilPictureData = sa.profilePictureData,
+                                             ProfilePictureData = sa.profilePictureData,
                                              FbLink = sa.fbLink,
                                              TwitterLink = sa.twLink,
                                              GPlusLink = sa.gPlusLink,
@@ -86,7 +86,30 @@ namespace BirdTouch_Server.Controllers
                                          });
 
                 var userInfo = ResultSetUserInfo.FirstOrDefault<User>();
-                if (userInfo != null) return Ok(Newtonsoft.Json.JsonConvert.SerializeObject(userInfo));
+                UserEncodedImage userEncoded = new UserEncodedImage()
+                {
+                    Adress = userInfo.Adress,
+                    DateOfBirth = userInfo.DateOfBirth,
+                    Email = userInfo.Email,
+                    FbLink = userInfo.FbLink,
+                    FirstName = userInfo.FirstName,
+                    Username = userInfo.Username,
+                    GPlusLink = userInfo.GPlusLink,
+                    Id = userInfo.Id,
+                    LastName = userInfo.LastName,
+                    LinkedInLink = userInfo.LinkedInLink,
+                    PhoneNumber = userInfo.PhoneNumber,
+                    TwitterLink = userInfo.TwitterLink,
+                    
+
+                };
+
+                if(userInfo.ProfilePictureData != null)
+                {
+                    userEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(userInfo.ProfilePictureData);
+                }
+              //  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
+                if (userInfo != null) return Ok(userEncoded);
 
 
             }
@@ -168,8 +191,9 @@ namespace BirdTouch_Server.Controllers
                 });
 
 
-           //     context.SaveChanges();
+          
                 context.user_info.Add(new EntityFrameworkModels.user_info());
+                context.business_info.Add(new EntityFrameworkModels.business_info());
                 context.SaveChanges();
 
             
@@ -188,7 +212,7 @@ namespace BirdTouch_Server.Controllers
                                              PhoneNumber = sa.phoneNumber,
                                              DateOfBirth = sa.dateOfBirth,
                                              Adress = sa.adress,
-                                             ProfilPictureData = sa.profilePictureData,
+                                             ProfilePictureData = sa.profilePictureData,
                                              FbLink = sa.fbLink,
                                              TwitterLink = sa.twLink,
                                              GPlusLink = sa.gPlusLink,
@@ -203,33 +227,6 @@ namespace BirdTouch_Server.Controllers
 
             return NotFound();
         }
-
-
-
-        //[HttpPost]
-        //[Route("rest/uploadPictureData/{id3}")]
-        //public IHttpActionResult updatePicture(int id3)
-        //{
-
-        //    //Request.
-            
-        //    byte[] mozda = Request.Content.ReadAsByteArrayAsync().Result;
-        //    IEnumerable<string> headerValues;
-        //    var picDataEncoded = string.Empty;
-
-        //    if (Request.Headers.TryGetValues("test2", out headerValues))
-        //    {
-        //        picDataEncoded = headerValues.FirstOrDefault();
-
-
-        //    }
-
-        //    return Ok("SVE JE OK");
-        //}
-
-
-
-
 
 
 
@@ -323,6 +320,152 @@ namespace BirdTouch_Server.Controllers
 
 
         }
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("rest/getBusiness/{idOwner}")]
+
+        public IHttpActionResult getBusiness(int idOwner)
+        {
+
+            using (var context = new EntityFrameworkModels.birdtouchEntities2())
+            {
+
+                var ResultSetBusinessInfo = (from s in context.business_info
+                                         
+                                         where s.id_business_owner == idOwner
+                                         select new Business()
+                                         {
+                                            Adress = s.adress,
+                                            CompanyName = s.companyname,
+                                            Email = s.email,
+                                            IdBusinessOwner = s.id_business_owner,
+                                            PhoneNumber = s.phonenumber,
+                                            Website = s.website,
+                                            ProfilePictureData = s.profilepicturedata
+                                         });
+
+                var businessInfo = ResultSetBusinessInfo.FirstOrDefault<Business>();
+
+                BusinessEncoded businessEncoded = new BusinessEncoded()
+                {
+                    Website = businessInfo.Website,
+                    Adress = businessInfo.Adress,
+                    CompanyName = businessInfo.CompanyName,
+                    Email = businessInfo.Email,
+                    IdBusinessOwner = businessInfo.IdBusinessOwner,
+                    PhoneNumber = businessInfo.PhoneNumber,
+                    
+
+                };
+
+                if(businessInfo.ProfilePictureData != null)
+                {
+                    businessEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(businessInfo.ProfilePictureData);
+                }
+
+                //  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
+                if (businessInfo != null) return Ok(businessEncoded);
+
+
+            }
+
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        [Route("rest/changeUserBusinessInfo")]
+        public IHttpActionResult changeUserBusinessInfo()
+
+        {
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("id");
+            String id = headerValues.FirstOrDefault();
+            int id2 = Int32.Parse(id);
+
+            headerValues = Request.Headers.GetValues("companyname");
+            String companyname2 = headerValues.FirstOrDefault();
+
+            headerValues = Request.Headers.GetValues("email");
+            String email2 = headerValues.FirstOrDefault();
+
+            headerValues = Request.Headers.GetValues("phone");
+            String phone2 = headerValues.FirstOrDefault();
+
+            headerValues = Request.Headers.GetValues("adress");
+            String adress2 = headerValues.FirstOrDefault();
+
+            headerValues = Request.Headers.GetValues("website");
+            String website2 = headerValues.FirstOrDefault();
+
+
+            byte[] profilePicDataTransfered = Request.Content.ReadAsByteArrayAsync().Result;
+
+            //jedini nacin za sada da ovo radi, mozda nekad pronadjem bolji nacin
+            if (companyname2.Equals("NULL")) companyname2 = null;
+            if (email2.Equals("NULL")) email2 = null;
+            if (phone2.Equals("NULL")) phone2 = null;
+            if (adress2.Equals("NULL")) adress2 = null;
+            if (website2.Equals("NULL")) website2 = null;
+           
+
+
+            using (var context = new EntityFrameworkModels.birdtouchEntities2()) //dvojka jer sam presao na sqlserver
+            {
+
+
+                EntityFrameworkModels.business_info result = context.business_info.SingleOrDefault<EntityFrameworkModels.business_info>(b => b.id_business_owner == id2);
+                if (result != null)
+                {
+
+                    result.companyname = companyname2;
+                    result.website = website2;
+                    result.email = email2;
+                    result.phonenumber = phone2;
+                    result.adress = adress2;   
+                    result.profilepicturedata = profilePicDataTransfered;
+                    context.SaveChanges();
+                    return Ok("Business data changed succesfully");
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
