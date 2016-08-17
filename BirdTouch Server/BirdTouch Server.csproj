@@ -149,6 +149,9 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BirdTouchController.cs" />
+    <Compile Include="EntityFrameworkModels\active_users.cs">
+      <DependentUpon>BirdTouchDatabaseModelSQLServer.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFrameworkModels\BirdTouchDatabaseModelSQLServer.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -178,6 +181,7 @@
     </Compile>
     <Compile Include="Models\Business.cs" />
     <Compile Include="Models\BusinessEncoded.cs" />
+    <Compile Include="Models\Coordinates.cs" />
     <Compile Include="Models\SimpleUser.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserEncodedImage.cs" />

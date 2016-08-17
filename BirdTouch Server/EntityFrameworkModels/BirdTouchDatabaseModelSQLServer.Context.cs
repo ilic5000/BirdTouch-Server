@@ -28,5 +28,6 @@ namespace BirdTouch_Server.EntityFrameworkModels
         public virtual DbSet<business_info> business_info { get; set; }
         public virtual DbSet<user_info> user_info { get; set; }
         public virtual DbSet<users> users { get; set; }
+        public virtual DbSet<active_users> active_users { get; set; }
     }
 }

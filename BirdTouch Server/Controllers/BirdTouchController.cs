@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Threading;
 using System.Collections.Specialized;
+using System.Globalization;
 
 namespace BirdTouch_Server.Controllers
 {
@@ -324,7 +325,105 @@ namespace BirdTouch_Server.Controllers
 
 
 
+        [HttpGet]
+        [Route("rest/makeUserVisible")]
+        public IHttpActionResult makeUserVisible()
 
+        {
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("id");
+            String id = headerValues.FirstOrDefault();
+            int id2 = Int32.Parse(id);
+
+            headerValues = Request.Headers.GetValues("longitude");
+            String longitudeString = headerValues.FirstOrDefault();
+            double longitude = Double.Parse(longitudeString, CultureInfo.InvariantCulture);
+
+            headerValues = Request.Headers.GetValues("latitude");
+            String latitudeString = headerValues.FirstOrDefault();
+            double latitude = Double.Parse(latitudeString, CultureInfo.InvariantCulture);
+
+            headerValues = Request.Headers.GetValues("mode");
+            String modeString = headerValues.FirstOrDefault();
+            int mode = Int32.Parse(modeString);
+
+
+
+            using (var context = new EntityFrameworkModels.birdtouchEntities2())
+            {
+
+                context.active_users.Add(new EntityFrameworkModels.active_users
+                {
+
+                    active_mode = mode,
+                    location_latitude = (decimal)latitude,
+                    location_longitude = (decimal)longitude,
+                    user_id = id2
+                });
+
+                context.SaveChanges();
+                
+
+
+                //    context.user_info.Add(new EntityFrameworkModels.user_info());
+                //    context.business_info.Add(new EntityFrameworkModels.business_info());
+                //    context.SaveChanges();
+
+            }
+
+            return Ok();
+
+
+        }
+
+
+
+        [HttpGet]
+        [Route("rest/makeUserInvisible")]
+        public IHttpActionResult makeUserInvisible()
+
+        {
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("id");
+            String id = headerValues.FirstOrDefault();
+            int id2 = Int32.Parse(id);
+
+            headerValues = Request.Headers.GetValues("mode"); //za modove tek treba da se vidi logika
+            String modeString = headerValues.FirstOrDefault();
+            int mode = Int32.Parse(modeString);
+
+
+
+            using (var context = new EntityFrameworkModels.birdtouchEntities2())
+            {
+               
+                var itemToRemove = context.active_users.SingleOrDefault(x => x.user_id==id2);
+
+                //logika kako obraditi mode, da se oduzima pa ako je 0 da se brise, ili tako nesto
+
+                if (itemToRemove != null)
+                {
+                    context.active_users.Remove(itemToRemove);
+                    context.SaveChanges();
+                    
+
+                }
+
+                
+
+            
+                //    context.user_info.Add(new EntityFrameworkModels.user_info());
+                //    context.business_info.Add(new EntityFrameworkModels.business_info());
+                //    context.SaveChanges();
+
+            }
+
+            return Ok();
+
+
+        }
 
 
 
@@ -462,6 +561,91 @@ namespace BirdTouch_Server.Controllers
 
 
 
+        [HttpGet]
+        [Route("rest/getPrivateUsersNearMe")]
+        public IHttpActionResult getPrivateUsersNearMe()
+
+        {
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("id");
+            String id = headerValues.FirstOrDefault();
+            int id5 = Int32.Parse(id);
+
+
+            //mozda da se napravi jos jedan parametar za radijus
+
+            decimal? mineLongitude = 0;
+            decimal? mineLatitude = 0;
+
+
+            using (var context = new EntityFrameworkModels.birdtouchEntities2())
+            {
+
+                var me = context.active_users.SingleOrDefault(x => x.user_id == id5);
+                mineLatitude = me.location_latitude;
+                mineLongitude = me.location_longitude;
+
+                //sada imamo moju lokaciju iz baze
+
+
+                List<int?> listOfUsersIdAroundMe = new List<int?>();
+
+
+                foreach (var active_user in context.active_users)
+                {
+                    if (active_user.user_id != id5) { //da ne uporedjujemo sa samim sobom
+                        double distance = new Coordinates((double)mineLatitude, (double)mineLongitude)
+                    .DistanceTo(
+                        new Coordinates((double)active_user.location_latitude, (double)active_user.location_longitude),
+                        UnitOfLength.Kilometers
+                    );
+
+                        if (distance < 1.5) listOfUsersIdAroundMe.Add(active_user.user_id);
+
+
+                    }
+                }
+
+
+
+                var tempResult = context.user_info.Where(x => listOfUsersIdAroundMe.Contains(x.id_user_private)).ToList<EntityFrameworkModels.user_info>();
+
+
+                //ovaj deo koji sledi mozda nije potreban, treba ispitati da li moze bez ovog encoded dela, ali ovako je jasnije
+                //takodje username ostaje null zbog zastite
+
+                List<UserEncodedImage> result = new List<UserEncodedImage>();
+
+                foreach (var item in tempResult)
+                {
+                    UserEncodedImage userEncoded = new UserEncodedImage()
+                    {
+                        Adress = item.adress,
+                        DateOfBirth = item.dateOfBirth,
+                        Email = item.email,
+                        FbLink = item.fbLink,
+                        FirstName = item.firstName,
+                        GPlusLink = item.gPlusLink,
+                        Id = item.id_user_private,
+                        LastName = item.lastName,
+                        LinkedInLink = item.linkedInLink,
+                        PhoneNumber = item.phoneNumber,
+                        TwitterLink = item.twLink
+
+                    };
+                    if (item.profilePictureData != null)
+                    {
+                        userEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(item.profilePictureData);
+                    }
+                    result.Add(userEncoded);
+
+                }
+
+                return Ok(result);
+
+        }
+        }
 
 
 

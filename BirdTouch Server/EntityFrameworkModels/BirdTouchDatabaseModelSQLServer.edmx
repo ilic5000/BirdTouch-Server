@@ -5,6 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="BirdTouchDatabaseModelSQLServer.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="active_users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="location_latitude" Type="decimal" Precision="11" Scale="8" />
+          <Property Name="location_longitude" Type="decimal" Precision="11" Scale="8" />
+          <Property Name="active_mode" Type="int" />
+          <Property Name="datetime_last_update" Type="smalldatetime" />
+        </EntityType>
         <EntityType Name="business_info">
           <Key>
             <PropertyRef Name="id_business_owner" />
@@ -42,26 +53,11 @@
           <Property Name="username" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
-        <Association Name="FK_business_info_users">
-          <End Role="users" Type="Self.users" Multiplicity="1" />
-          <End Role="business_info" Type="Self.business_info" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="business_info">
-              <PropertyRef Name="id_business_owner" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="BirdTouchDatabaseModelSQLServerStoreContainer">
+          <EntitySet Name="active_users" EntityType="Self.active_users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="business_info" EntityType="Self.business_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_info" EntityType="Self.user_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_business_info_users" Association="Self.FK_business_info_users">
-            <End Role="users" EntitySet="users" />
-            <End Role="business_info" EntitySet="business_info" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -108,7 +104,19 @@
           <EntitySet Name="business_info" EntityType="Self.business_info" />
           <EntitySet Name="user_info" EntityType="Self.user_info" />
           <EntitySet Name="users" EntityType="Self.users" />
+          <EntitySet Name="active_users" EntityType="BirdTouchDatabaseModelSQLServer.active_users" />
         </EntityContainer>
+        <EntityType Name="active_users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="location_latitude" Type="Decimal" Precision="11" Scale="8" />
+          <Property Name="location_longitude" Type="Decimal" Precision="11" Scale="8" />
+          <Property Name="active_mode" Type="Int32" />
+          <Property Name="datetime_last_update" Type="DateTime" Precision="0" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -152,6 +160,18 @@
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="active_users">
+            <EntityTypeMapping TypeName="BirdTouchDatabaseModelSQLServer.active_users">
+              <MappingFragment StoreEntitySet="active_users">
+                <ScalarProperty Name="datetime_last_update" ColumnName="datetime_last_update" />
+                <ScalarProperty Name="active_mode" ColumnName="active_mode" />
+                <ScalarProperty Name="location_longitude" ColumnName="location_longitude" />
+                <ScalarProperty Name="location_latitude" ColumnName="location_latitude" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
