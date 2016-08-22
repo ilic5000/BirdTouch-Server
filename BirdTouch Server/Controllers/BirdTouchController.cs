@@ -2,11 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Threading;
-using System.Collections.Specialized;
 using System.Globalization;
 
 namespace BirdTouch_Server.Controllers
@@ -15,15 +11,14 @@ namespace BirdTouch_Server.Controllers
     {
 
         //NOTE:
-        //RAZVIJAO SAM APLIKACIJU KORISTECI MYSQL bazu, ali zbog glupavih connectora
+        //razvijao sam aplikaciju koristeci MYSQL bazu, ali zbog glupavih connectora
         //MORAO SAM da predjem na sql server, za sada sam prezadovoljan
         //entityframework gotovo da nije osetio promenu, samo sam promenio ime nekih klasa. fenomenalno.
 
         [HttpGet]
-        [Route("rest/getUser/{id}")]
+        [Route("rest/getUser/{id}")] //test, ne koristi se nigde u aplikaciji, prvi rest servis koji sam napisao u c#, sentimentalno sam vezan
         public IHttpActionResult getUser(int id)
         {
-
             using (var context = new EntityFrameworkModels.birdtouchEntities2())
             {
 
@@ -49,8 +44,6 @@ namespace BirdTouch_Server.Controllers
 
                 var userInfo = ResultSetUserInfo.FirstOrDefault<User>();
                 if (userInfo != null) return Ok(userInfo);
-
-
             }
 
             return NotFound();
@@ -59,7 +52,6 @@ namespace BirdTouch_Server.Controllers
 
         [HttpGet]
         [Route("rest/getUserLogin")]
-
         public IHttpActionResult getUserLogin()
         {
 
@@ -97,7 +89,7 @@ namespace BirdTouch_Server.Controllers
 
                 var userInfo = ResultSetUserInfo.FirstOrDefault<User>();
                 if (userInfo != null) { 
-                    UserEncodedImage userEncoded = new UserEncodedImage()
+                    UserEncodedImage userEncoded = new UserEncodedImage() //novaKlasa zbog base64string konverzije niza bajtova 
                 {
                     Adress = userInfo.Adress,
                     DateOfBirth = userInfo.DateOfBirth,
@@ -111,16 +103,13 @@ namespace BirdTouch_Server.Controllers
                     LinkedInLink = userInfo.LinkedInLink,
                     PhoneNumber = userInfo.PhoneNumber,
                     TwitterLink = userInfo.TwitterLink,
-                    
-
                 };
 
                 if(userInfo.ProfilePictureData != null)
                 {
                     userEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(userInfo.ProfilePictureData);
-                }
-              //  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
-                 return Ok(userEncoded);
+                }              
+                 return Ok(userEncoded); //  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
                 }
 
             }
@@ -158,7 +147,6 @@ namespace BirdTouch_Server.Controllers
 
                 var userInfo = ResultSetUserInfo.FirstOrDefault<SimpleUser>();
                 if (userInfo != null) return Ok(userInfo);
-
             }
 
             return NotFound();
@@ -235,8 +223,7 @@ namespace BirdTouch_Server.Controllers
 
             
 
-                //mozda treba da se smisli nekako da ne vraca ovaj objekat, ali vec sam napravio da startPage ovako radi, sa ovim objektom, zato ga vracam
-                var ResultSetUserInfo2 = (from s in context.users
+                 var ResultSetUserInfo2 = (from s in context.users
                                          join sa in context.user_info on s.id equals sa.id_user_private
                                          where s.username == username2 && s.password == password2
                                          select new User()
@@ -257,18 +244,14 @@ namespace BirdTouch_Server.Controllers
                                          });
 
                 var userInfo2 = ResultSetUserInfo2.FirstOrDefault<User>();
-                if (userInfo2 != null) return Ok(userInfo2);
-
-
+                if (userInfo2 != null) return Ok(userInfo2); //mozda treba da se smisli nekako da ne vraca ovaj objekat, ali vec sam napravio da Register i startPage u klijentu ovako radi, sa ovim objektom, zato ga vracam
             }
 
             return NotFound();
         }
 
 
-
-
-        [HttpPost] //id2 mora jer vec posotji id u projektu, ne pitajte kako sam naso taj bug
+        [HttpPost]
         [Route("rest/changeUserPrivateInfo")]
         public IHttpActionResult changeUserPrivateInfo()
 
@@ -344,7 +327,10 @@ namespace BirdTouch_Server.Controllers
                     result.twLink = twitterlink2;
                     result.gPlusLink = gpluslink2;
                     result.linkedInLink = linkedin2;
-                    result.profilePictureData = profilePicDataTransfered;
+
+                    if (profilePicDataTransfered.Length != 1)
+                        result.profilePictureData = profilePicDataTransfered;
+
                     context.SaveChanges();
                     return Ok("User data changed succesfully");
                 }
@@ -392,8 +378,6 @@ namespace BirdTouch_Server.Controllers
 
                 var userExistInThisMode = context.active_users.SingleOrDefault(x => x.user_id == id2 && x.active_mode==mode);
 
-                //logika kako obraditi mode, da se oduzima pa ako je 0 da se brise, ili tako nesto
-
                 if (userExistInThisMode == null)
 
                 {
@@ -417,15 +401,6 @@ namespace BirdTouch_Server.Controllers
                 }
 
                 context.SaveChanges();
-
-
-
-
-
-
-                //    context.user_info.Add(new EntityFrameworkModels.user_info());
-                //    context.business_info.Add(new EntityFrameworkModels.business_info());
-                //    context.SaveChanges();
 
             }
 
@@ -479,7 +454,7 @@ namespace BirdTouch_Server.Controllers
 
 
         [HttpGet]
-        [Route("rest/getBusiness/{idOwner}")]
+        [Route("rest/getBusiness/{idOwner}")] //public REST servis, ako neko bas hoce, moze i iz browsera da pretrazuje kompanije, visak vidljivosti njima ne smeta
 
         public IHttpActionResult getBusiness(int idOwner)
         {
@@ -520,9 +495,8 @@ namespace BirdTouch_Server.Controllers
                 {
                     businessEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(businessInfo.ProfilePictureData);
                 }
-
-                //  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
-                return Ok(businessEncoded);
+                
+                return Ok(businessEncoded);//  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
                 }
 
             }
@@ -581,8 +555,11 @@ namespace BirdTouch_Server.Controllers
                     result.website = website2;
                     result.email = email2;
                     result.phonenumber = phone2;
-                    result.adress = adress2;   
-                    result.profilepicturedata = profilePicDataTransfered;
+                    result.adress = adress2; 
+                      
+                    if(profilePicDataTransfered.Length != 1)
+                        result.profilepicturedata = profilePicDataTransfered;
+
                     context.SaveChanges();
                     return Ok("Business data changed succesfully");
                 }
@@ -595,11 +572,6 @@ namespace BirdTouch_Server.Controllers
 
 
         }
-
-
-
-
-
 
 
         [HttpGet]
@@ -654,7 +626,7 @@ namespace BirdTouch_Server.Controllers
 
 
                 //ovaj deo koji sledi mozda nije potreban, treba ispitati da li moze bez ovog encoded dela, ali ovako je jasnije
-                //takodje username ostaje null zbog zastite
+                //takodje, username ostaje null zbog zastite
 
                 List<UserEncodedImage> result = new List<UserEncodedImage>();
 
@@ -679,7 +651,8 @@ namespace BirdTouch_Server.Controllers
                     {
                         userEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(item.profilePictureData);
                     }
-                    //if (result.Count <5)
+                    
+                    
                     result.Add(userEncoded);
 
                 }
@@ -688,15 +661,6 @@ namespace BirdTouch_Server.Controllers
 
         }
         }
-
-
-
-
-
-
-
-
-
 
         [HttpGet]
         [Route("rest/getBusinessUsersNearMe")]
@@ -770,7 +734,8 @@ namespace BirdTouch_Server.Controllers
                     {
                         businessEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(item.profilepicturedata);
                     }
-                    //if (result.Count <5)
+                    
+
                     result.Add(businessEncoded);
 
                 }
@@ -862,17 +827,6 @@ namespace BirdTouch_Server.Controllers
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 //var ResultSetUserInfo = (from s in context.users

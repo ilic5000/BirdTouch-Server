@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace BirdTouch_Server.Models
+﻿namespace BirdTouch_Server.Models
 {
     public class Business
     {

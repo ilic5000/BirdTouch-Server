@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace BirdTouch_Server.Models
+﻿namespace BirdTouch_Server.Models
 {
     public class User
     {
@@ -20,14 +15,6 @@ namespace BirdTouch_Server.Models
         public string Adress { get; set; }
 
         public byte[] ProfilePictureData { get; set; }
-
-        //public String ProfilePictureDataEncoded64
-        //{
-        //    get
-        //    {
-        //        return Convert.ToBase64String(ProfilePictureData);
-        //    }
-        //}
 
         public string FbLink { get; set; }
 
