@@ -58,10 +58,19 @@ namespace BirdTouch_Server.Controllers
 
 
         [HttpGet]
-        [Route("rest/getUserLogin/{username}/{password}")]
+        [Route("rest/getUserLogin")]
 
-        public IHttpActionResult getUserLogin(String username, String password)
+        public IHttpActionResult getUserLogin()
         {
+
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("username");
+            String username = headerValues.FirstOrDefault();
+
+
+            headerValues = Request.Headers.GetValues("password");
+            String password = headerValues.FirstOrDefault();
 
             using (var context = new EntityFrameworkModels.birdtouchEntities2())
             {
@@ -87,7 +96,8 @@ namespace BirdTouch_Server.Controllers
                                          });
 
                 var userInfo = ResultSetUserInfo.FirstOrDefault<User>();
-                UserEncodedImage userEncoded = new UserEncodedImage()
+                if (userInfo != null) { 
+                    UserEncodedImage userEncoded = new UserEncodedImage()
                 {
                     Adress = userInfo.Adress,
                     DateOfBirth = userInfo.DateOfBirth,
@@ -110,8 +120,8 @@ namespace BirdTouch_Server.Controllers
                     userEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(userInfo.ProfilePictureData);
                 }
               //  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
-                if (userInfo != null) return Ok(userEncoded);
-
+                 return Ok(userEncoded);
+                }
 
             }
 
@@ -119,9 +129,18 @@ namespace BirdTouch_Server.Controllers
         }
 
         [HttpGet]
-        [Route("rest/doesUserExist/{username}/{password}")]
-        public IHttpActionResult doesUserExist(String username, String password)
+        [Route("rest/doesUserExist")]
+        public IHttpActionResult doesUserExist()
         {
+
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("username");
+            String username = headerValues.FirstOrDefault();
+
+
+            headerValues = Request.Headers.GetValues("password");
+            String password = headerValues.FirstOrDefault();
 
             using (var context = new EntityFrameworkModels.birdtouchEntities2())
             {
@@ -147,9 +166,15 @@ namespace BirdTouch_Server.Controllers
 
 
         [HttpGet] 
-        [Route("rest/doesUsernameExist/{username}")]
-        public IHttpActionResult doesUsernameExist(String username)
+        [Route("rest/doesUsernameExist")]
+        public IHttpActionResult doesUsernameExist()
         {
+
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("username");
+            String username = headerValues.FirstOrDefault();
+
 
             using ( var context = new EntityFrameworkModels.birdtouchEntities2())
             {
@@ -175,9 +200,20 @@ namespace BirdTouch_Server.Controllers
 
 
         [HttpGet]
-        [Route("rest/registerUser/{username2}/{password2}")]
-        public IHttpActionResult registerUser(String username2, String password2)
+        [Route("rest/registerUser")]
+        public IHttpActionResult registerUser()
         {
+
+
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("username");
+            String username2 = headerValues.FirstOrDefault();
+            
+
+            headerValues = Request.Headers.GetValues("password");
+            String password2 = headerValues.FirstOrDefault();
+
 
             using (var context = new EntityFrameworkModels.birdtouchEntities2())
             {
@@ -353,17 +389,38 @@ namespace BirdTouch_Server.Controllers
             using (var context = new EntityFrameworkModels.birdtouchEntities2())
             {
 
-                context.active_users.Add(new EntityFrameworkModels.active_users
-                {
 
-                    active_mode = mode,
-                    location_latitude = (decimal)latitude,
-                    location_longitude = (decimal)longitude,
-                    user_id = id2
-                });
+                var userExistInThisMode = context.active_users.SingleOrDefault(x => x.user_id == id2 && x.active_mode==mode);
+
+                //logika kako obraditi mode, da se oduzima pa ako je 0 da se brise, ili tako nesto
+
+                if (userExistInThisMode == null)
+
+                {
+                    context.active_users.Add(new EntityFrameworkModels.active_users
+                    {
+
+                        active_mode = mode,
+                        location_latitude = (decimal)latitude,
+                        location_longitude = (decimal)longitude,
+                        user_id = id2
+                    });
+
+                    
+                 }
+                else
+                {
+                    //ako je vec ulogovan, samo updatujemo lokaciju
+                    userExistInThisMode.location_latitude = (decimal)latitude;
+                    userExistInThisMode.location_longitude = (decimal)longitude;
+
+                }
 
                 context.SaveChanges();
-                
+
+
+
+
 
 
                 //    context.user_info.Add(new EntityFrameworkModels.user_info());
@@ -399,7 +456,7 @@ namespace BirdTouch_Server.Controllers
             using (var context = new EntityFrameworkModels.birdtouchEntities2())
             {
                
-                var itemToRemove = context.active_users.SingleOrDefault(x => x.user_id==id2);
+                var itemToRemove = context.active_users.SingleOrDefault(x => x.user_id==id2 && x.active_mode == mode);
 
                 //logika kako obraditi mode, da se oduzima pa ako je 0 da se brise, ili tako nesto
 
@@ -410,13 +467,7 @@ namespace BirdTouch_Server.Controllers
                     
 
                 }
-
-                
-
-            
-                //    context.user_info.Add(new EntityFrameworkModels.user_info());
-                //    context.business_info.Add(new EntityFrameworkModels.business_info());
-                //    context.SaveChanges();
+           
 
             }
 
@@ -452,7 +503,8 @@ namespace BirdTouch_Server.Controllers
 
                 var businessInfo = ResultSetBusinessInfo.FirstOrDefault<Business>();
 
-                BusinessEncoded businessEncoded = new BusinessEncoded()
+                if (businessInfo != null) { 
+                    BusinessEncoded businessEncoded = new BusinessEncoded()
                 {
                     Website = businessInfo.Website,
                     Adress = businessInfo.Adress,
@@ -470,8 +522,8 @@ namespace BirdTouch_Server.Controllers
                 }
 
                 //  String serialized = Newtonsoft.Json.JsonConvert.SerializeObject(userEncoded);
-                if (businessInfo != null) return Ok(businessEncoded);
-
+                return Ok(businessEncoded);
+                }
 
             }
 
@@ -550,17 +602,6 @@ namespace BirdTouch_Server.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
         [HttpGet]
         [Route("rest/getPrivateUsersNearMe")]
         public IHttpActionResult getPrivateUsersNearMe()
@@ -582,7 +623,7 @@ namespace BirdTouch_Server.Controllers
             using (var context = new EntityFrameworkModels.birdtouchEntities2())
             {
 
-                var me = context.active_users.SingleOrDefault(x => x.user_id == id5);
+                var me = context.active_users.SingleOrDefault(x => x.user_id == id5 && x.active_mode == 1);
                 mineLatitude = me.location_latitude;
                 mineLongitude = me.location_longitude;
 
@@ -594,7 +635,7 @@ namespace BirdTouch_Server.Controllers
 
                 foreach (var active_user in context.active_users)
                 {
-                    if (active_user.user_id != id5) { //da ne uporedjujemo sa samim sobom
+                    if (active_user.user_id != id5 && active_user.active_mode == 1) { //da ne uporedjujemo sa samim sobom
                         double distance = new Coordinates((double)mineLatitude, (double)mineLongitude)
                     .DistanceTo(
                         new Coordinates((double)active_user.location_latitude, (double)active_user.location_longitude),
@@ -638,6 +679,7 @@ namespace BirdTouch_Server.Controllers
                     {
                         userEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(item.profilePictureData);
                     }
+                    //if (result.Count <5)
                     result.Add(userEncoded);
 
                 }
@@ -645,6 +687,97 @@ namespace BirdTouch_Server.Controllers
                 return Ok(result);
 
         }
+        }
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("rest/getBusinessUsersNearMe")]
+        public IHttpActionResult getBusinessUsersNearMe()
+
+        {
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("id");
+            String id = headerValues.FirstOrDefault();
+            int id5 = Int32.Parse(id);
+
+
+            //mozda da se napravi jos jedan parametar za radijus
+
+            decimal? mineLongitude = 0;
+            decimal? mineLatitude = 0;
+
+
+            using (var context = new EntityFrameworkModels.birdtouchEntities2())
+            {
+
+                var me = context.active_users.SingleOrDefault(x => x.user_id == id5 && x.active_mode == 2);
+                mineLatitude = me.location_latitude;
+                mineLongitude = me.location_longitude;
+
+                //sada imamo moju lokaciju iz baze
+
+
+                List<int?> listOfUsersIdAroundMe = new List<int?>();
+
+
+                foreach (var active_user in context.active_users)
+                {
+                    if (active_user.user_id != id5 && active_user.active_mode == 2)
+                    { //da ne uporedjujemo sa samim sobom
+                        double distance = new Coordinates((double)mineLatitude, (double)mineLongitude)
+                    .DistanceTo(
+                        new Coordinates((double)active_user.location_latitude, (double)active_user.location_longitude),
+                        UnitOfLength.Kilometers
+                    );
+
+                        if (distance < 1.5) listOfUsersIdAroundMe.Add(active_user.user_id);
+
+
+                    }
+                }
+
+
+
+                var tempResult = context.business_info.Where(x => listOfUsersIdAroundMe.Contains(x.id_business_owner)).ToList<EntityFrameworkModels.business_info>();
+
+
+                //ovaj deo koji sledi mozda nije potreban, treba ispitati da li moze bez ovog encoded dela, ali ovako je jasnije
+                //takodje username ostaje null zbog zastite
+
+                List<BusinessEncoded> result = new List<BusinessEncoded>();
+
+                foreach (var item in tempResult)
+                {
+                    BusinessEncoded businessEncoded = new BusinessEncoded()
+                    {
+                        CompanyName = item.companyname,
+                        IdBusinessOwner = item.id_business_owner,
+                        Website = item.website,
+                        Adress = item.adress,     
+                        Email = item.email,                        
+                        PhoneNumber = item.phonenumber                       
+                    };
+                    if (item.profilepicturedata != null)
+                    {
+                        businessEncoded.ProfilePictureDataEncoded = Convert.ToBase64String(item.profilepicturedata);
+                    }
+                    //if (result.Count <5)
+                    result.Add(businessEncoded);
+
+                }
+
+                return Ok(result);
+
+            }
         }
 
 
