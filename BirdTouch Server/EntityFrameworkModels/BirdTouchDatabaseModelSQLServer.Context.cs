@@ -12,6 +12,8 @@ namespace BirdTouch_Server.EntityFrameworkModels
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class birdtouchEntities2 : DbContext
     {
@@ -29,5 +31,47 @@ namespace BirdTouch_Server.EntityFrameworkModels
         public virtual DbSet<user_info> user_info { get; set; }
         public virtual DbSet<users> users { get; set; }
         public virtual DbSet<active_users> active_users { get; set; }
+    
+        public virtual int createActiveUser(Nullable<int> user_id, Nullable<decimal> latitude, Nullable<decimal> longitude, Nullable<int> active_mode)
+        {
+            var user_idParameter = user_id.HasValue ?
+                new ObjectParameter("user_id", user_id) :
+                new ObjectParameter("user_id", typeof(int));
+    
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("latitude", latitude) :
+                new ObjectParameter("latitude", typeof(decimal));
+    
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("longitude", longitude) :
+                new ObjectParameter("longitude", typeof(decimal));
+    
+            var active_modeParameter = active_mode.HasValue ?
+                new ObjectParameter("active_mode", active_mode) :
+                new ObjectParameter("active_mode", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("createActiveUser", user_idParameter, latitudeParameter, longitudeParameter, active_modeParameter);
+        }
+    
+        public virtual int updateActiveUser(Nullable<int> user_id, Nullable<decimal> latitude, Nullable<decimal> longitude, Nullable<int> active_mode)
+        {
+            var user_idParameter = user_id.HasValue ?
+                new ObjectParameter("user_id", user_id) :
+                new ObjectParameter("user_id", typeof(int));
+    
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("latitude", latitude) :
+                new ObjectParameter("latitude", typeof(decimal));
+    
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("longitude", longitude) :
+                new ObjectParameter("longitude", typeof(decimal));
+    
+            var active_modeParameter = active_mode.HasValue ?
+                new ObjectParameter("active_mode", active_mode) :
+                new ObjectParameter("active_mode", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateActiveUser", user_idParameter, latitudeParameter, longitudeParameter, active_modeParameter);
+        }
     }
 }

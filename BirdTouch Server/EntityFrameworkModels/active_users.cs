@@ -19,6 +19,6 @@ namespace BirdTouch_Server.EntityFrameworkModels
         public Nullable<decimal> location_latitude { get; set; }
         public Nullable<decimal> location_longitude { get; set; }
         public Nullable<int> active_mode { get; set; }
-        public Nullable<System.DateTime> datetime_last_update { get; set; }
+        public System.DateTime datetime_last_update { get; set; }
     }
 }

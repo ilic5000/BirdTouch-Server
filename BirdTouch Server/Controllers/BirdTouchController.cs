@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Globalization;
+using System.Data.SqlClient;
 
 namespace BirdTouch_Server.Controllers
 {
@@ -381,23 +382,48 @@ namespace BirdTouch_Server.Controllers
                 if (userExistInThisMode == null)
 
                 {
-                    context.active_users.Add(new EntityFrameworkModels.active_users
-                    {
+                    //**********
+                    //pozivanje stored procedure zbog datetime stamp koji nam je potreban a koji se moze pozvati samo unutar  sql servera
+                    SqlParameter param1 = new SqlParameter("@user_id", id2);
+                    SqlParameter param2 = new SqlParameter("@latitude", (decimal)latitude);
+                    SqlParameter param3 = new SqlParameter("@longitude", (decimal)longitude);
+                    SqlParameter param4 = new SqlParameter("@active_mode", mode);
+                    context.Database.ExecuteSqlCommand("createActiveUser @user_id, @latitude, @longitude, @active_mode", param1, param2, param3, param4);
 
-                        active_mode = mode,
-                        location_latitude = (decimal)latitude,
-                        location_longitude = (decimal)longitude,
-                        user_id = id2
-                    });
 
+                    //***************
+                    //stari nacin bez datetime stamp
+
+                    //context.active_users.Add(new EntityFrameworkModels.active_users
+                    //{
+
+                    //    active_mode = mode,
+                    //    location_latitude = (decimal)latitude,
+                    //    location_longitude = (decimal)longitude,
+                    //    user_id = id2
+                    //});
+                    //****************
                     
                  }
                 else
                 {
                     //ako je vec ulogovan, samo updatujemo lokaciju
-                    userExistInThisMode.location_latitude = (decimal)latitude;
-                    userExistInThisMode.location_longitude = (decimal)longitude;
 
+
+                    SqlParameter param1 = new SqlParameter("@user_id", id2);
+                    SqlParameter param2 = new SqlParameter("@latitude", (decimal)latitude);
+                    SqlParameter param3 = new SqlParameter("@longitude", (decimal)longitude);
+                    SqlParameter param4 = new SqlParameter("@active_mode", mode);
+                    context.Database.ExecuteSqlCommand("updateActiveUser @user_id, @latitude, @longitude, @active_mode", param1, param2, param3, param4);
+
+
+
+                    //**********
+                    //stari nacin bez datetime stamp
+
+                    //userExistInThisMode.location_latitude = (decimal)latitude;
+                    //userExistInThisMode.location_longitude = (decimal)longitude;
+                    //***********
                 }
 
                 context.SaveChanges();
