@@ -199,7 +199,7 @@
     <Content Include="EntityFrameworkModels\BirdTouchDatabaseModelSQLServer.edmx.diagram">
       <DependentUpon>BirdTouchDatabaseModelSQLServer.edmx</DependentUpon>
     </Content>
-    <Content Include="DatabaseBackup\birdtouch.bak" />
+    <Content Include="DatabaseBackup\DatabaseBackup" />
     <None Include="Properties\PublishProfiles\MySettingsToLocalhost.pubxml" />
     <None Include="Properties\PublishProfiles\Pokusaj 2.pubxml" />
     <None Include="Web.Debug.config">
