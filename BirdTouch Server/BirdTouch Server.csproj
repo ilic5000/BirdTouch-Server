@@ -200,6 +200,7 @@
       <DependentUpon>BirdTouchDatabaseModelSQLServer.edmx</DependentUpon>
     </Content>
     <Content Include="DatabaseBackup\DatabaseBackup" />
+    <Content Include="DatabaseBackup\DatabaseBacupUtf8Added" />
     <None Include="Properties\PublishProfiles\MySettingsToLocalhost.pubxml" />
     <None Include="Properties\PublishProfiles\Pokusaj 2.pubxml" />
     <None Include="Web.Debug.config">

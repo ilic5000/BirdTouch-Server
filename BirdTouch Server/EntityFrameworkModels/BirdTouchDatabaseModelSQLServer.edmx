@@ -21,11 +21,11 @@
             <PropertyRef Name="id_business_owner" />
           </Key>
           <Property Name="id_business_owner" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="companyname" Type="varchar" MaxLength="50" />
-          <Property Name="email" Type="varchar" MaxLength="50" />
-          <Property Name="phonenumber" Type="varchar" MaxLength="50" />
-          <Property Name="website" Type="varchar" MaxLength="50" />
-          <Property Name="adress" Type="varchar" MaxLength="50" />
+          <Property Name="companyname" Type="nvarchar" MaxLength="50" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="phonenumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="website" Type="nvarchar" MaxLength="50" />
+          <Property Name="adress" Type="nvarchar" MaxLength="50" />
           <Property Name="profilepicturedata" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="user_info">
@@ -33,16 +33,16 @@
             <PropertyRef Name="id_user_private" />
           </Key>
           <Property Name="id_user_private" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="firstName" Type="varchar" MaxLength="50" />
-          <Property Name="lastName" Type="varchar" MaxLength="50" />
-          <Property Name="email" Type="varchar" MaxLength="50" />
-          <Property Name="phoneNumber" Type="varchar" MaxLength="50" />
-          <Property Name="dateOfBirth" Type="varchar" MaxLength="50" />
-          <Property Name="adress" Type="varchar" MaxLength="50" />
-          <Property Name="fbLink" Type="varchar" MaxLength="50" />
-          <Property Name="twLink" Type="varchar" MaxLength="50" />
-          <Property Name="gPlusLink" Type="varchar" MaxLength="50" />
-          <Property Name="linkedInLink" Type="varchar" MaxLength="50" />
+          <Property Name="firstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="lastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="phoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="dateOfBirth" Type="nvarchar" MaxLength="50" />
+          <Property Name="adress" Type="nvarchar" MaxLength="50" />
+          <Property Name="fbLink" Type="nvarchar" MaxLength="50" />
+          <Property Name="twLink" Type="nvarchar" MaxLength="50" />
+          <Property Name="gPlusLink" Type="nvarchar" MaxLength="50" />
+          <Property Name="linkedInLink" Type="nvarchar" MaxLength="50" />
           <Property Name="profilePictureData" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="users">
@@ -80,11 +80,11 @@
             <PropertyRef Name="id_business_owner" />
           </Key>
           <Property Name="id_business_owner" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="companyname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="phonenumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="website" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="companyname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phonenumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="website" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="profilepicturedata" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="user_info">
@@ -92,16 +92,16 @@
             <PropertyRef Name="id_user_private" />
           </Key>
           <Property Name="id_user_private" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="phoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="dateOfBirth" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="fbLink" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="twLink" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="gPlusLink" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="linkedInLink" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dateOfBirth" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fbLink" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="twLink" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="gPlusLink" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="linkedInLink" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="profilePictureData" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="users">
