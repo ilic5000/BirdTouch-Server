@@ -31,6 +31,8 @@ namespace BirdTouch_Server.EntityFrameworkModels
         public virtual DbSet<user_info> user_info { get; set; }
         public virtual DbSet<users> users { get; set; }
         public virtual DbSet<active_users> active_users { get; set; }
+        public virtual DbSet<saved_private> saved_private { get; set; }
+        public virtual DbSet<saved_business> saved_business { get; set; }
     
         public virtual int createActiveUser(Nullable<int> user_id, Nullable<decimal> latitude, Nullable<decimal> longitude, Nullable<int> active_mode)
         {

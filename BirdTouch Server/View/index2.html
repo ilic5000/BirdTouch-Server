@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    
+</head>
+<body>
+    <input type="text" id="Username" required="required" />
+    <input type="password" id="Password" required="required" />
+                            <button id="Login-GO"><span>Go</span></button>
+                       
+    <script type="text/javascript">
+$( "#Login-GO" ).click(function() {
+
+	var username = $('#Username').val();
+	var password = $('#Password').val();
+
+	//alert(username + " " + password);
+		 $.ajax({
+		type : 'GET',
+		dataType: 'json',
+		
+		headers:{
+		    "username": username,
+            "password": password
+		},
+		url : 'http://localhost:6787/BirdTouchServer/rest/getUserLogin',
+
+		success : function(data) {
+			alert("SUCCESS " + data);
+		},
+		error: function (error) {
+		    alert(error);
+		}
+
+	});
+});
+    </script>
+	
+	Jao Aleksandre sta mi radiš :D :D
+
+Šta da ti kažem, glupo je ne prihvatiti taj novac, pogotovo ako si u frci sa parama. Srećna ti prodaja. Ja odustajem od ovog oglasa jer nemam takav novac.
+
+Pozdrav i sve najbolje,
+Nenad. 
+</body>
+</html>

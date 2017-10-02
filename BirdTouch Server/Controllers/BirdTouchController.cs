@@ -50,6 +50,13 @@ namespace BirdTouch_Server.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        [Route("rest/getTest")] 
+        public IHttpActionResult getTest()
+        {
+             return Ok("SVE JE OK");
+            
+        }
 
         [HttpGet]
         [Route("rest/getUserLogin")]
@@ -772,6 +779,102 @@ namespace BirdTouch_Server.Controllers
         }
 
 
+        [HttpGet]
+        [Route("rest/savePrivateSavedList")]
+        public IHttpActionResult savePrivateSavedList()
+        {
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("id");
+            String id = headerValues.FirstOrDefault();
+            int id5 = Int32.Parse(id);
+
+
+            headerValues = Request.Headers.GetValues("listSavedContactsIDSerialized");
+            List<int> listOfUsersToBeAdded = Newtonsoft.Json.JsonConvert.DeserializeObject <List<int>>(headerValues.FirstOrDefault());
+
+         
+            using (var context = new EntityFrameworkModels.birdtouchEntities2())
+            {
+
+                foreach (int item in listOfUsersToBeAdded)
+                {
+                    var alredyExist = context.saved_private.FirstOrDefault(x => x.user_id == id5 && x.saved_contact_id == item);
+                    if (alredyExist == null)
+                    {
+
+                        context.saved_private.Add(new EntityFrameworkModels.saved_private()
+                        {
+                            
+                            user_id = id5,
+                            saved_contact_id = item,
+                            description = "saved contact"
+                        });
+
+                        context.SaveChanges();
+                    }
+                    
+                }
+
+                
+            }
+
+                     
+              System.Diagnostics.Debug.WriteLine("Uspesno pozvan servis, id korisnika " + id5);
+            
+
+              return Ok();
+
+            
+        }
+
+
+        [HttpGet]
+        [Route("rest/saveBusinessSavedList")]
+        public IHttpActionResult saveBusinessSavedList()
+        {
+            IEnumerable<string> headerValues;
+
+            headerValues = Request.Headers.GetValues("id");
+            String id = headerValues.FirstOrDefault();
+            int id5 = Int32.Parse(id);
+
+
+            headerValues = Request.Headers.GetValues("listSavedContactsIDSerialized");
+            List<int> listOfUsersToBeAdded = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(headerValues.FirstOrDefault());
+
+
+            using (var context = new EntityFrameworkModels.birdtouchEntities2())
+            {
+
+                foreach (int item in listOfUsersToBeAdded)
+                {
+                    var alredyExist = context.saved_business.FirstOrDefault(x => x.user_id == id5 && x.saved_contact_id == item);
+                    if (alredyExist == null)
+                    {
+
+                        context.saved_business.Add(new EntityFrameworkModels.saved_business() {
+                            user_id = id5,
+                            saved_contact_id = item,
+                            description = "saved business contact"
+                        });
+
+                        context.SaveChanges();
+                    }
+
+                }
+
+
+            }
+
+
+            System.Diagnostics.Debug.WriteLine("Uspesno pozvan servis, id korisnika " + id5);
+
+
+            return Ok();
+
+
+        }
 
 
 

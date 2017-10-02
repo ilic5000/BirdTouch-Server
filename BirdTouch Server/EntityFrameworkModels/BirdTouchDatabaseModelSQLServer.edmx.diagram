@@ -9,6 +9,8 @@
         <EntityTypeShape EntityType="BirdTouchDatabaseModelSQLServer.user_info" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
         <EntityTypeShape EntityType="BirdTouchDatabaseModelSQLServer.users" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="BirdTouchDatabaseModelSQLServer.active_users" Width="1.5" PointX="5.125" PointY="2.875" />
+        <EntityTypeShape EntityType="BirdTouchDatabaseModelSQLServer.saved_private" Width="1.5" PointX="5.25" PointY="5.75" />
+        <EntityTypeShape EntityType="BirdTouchDatabaseModelSQLServer.saved_business" Width="1.5" PointX="7.375" PointY="2.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

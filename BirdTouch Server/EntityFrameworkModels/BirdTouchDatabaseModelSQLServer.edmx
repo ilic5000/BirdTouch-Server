@@ -28,6 +28,24 @@
           <Property Name="adress" Type="nvarchar" MaxLength="50" />
           <Property Name="profilepicturedata" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="saved_business">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="saved_contact_id" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="saved_private">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="saved_contact_id" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="user_info">
           <Key>
             <PropertyRef Name="id_user_private" />
@@ -68,6 +86,8 @@
         <EntityContainer Name="BirdTouchDatabaseModelSQLServerStoreContainer">
           <EntitySet Name="active_users" EntityType="Self.active_users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="business_info" EntityType="Self.business_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="saved_business" EntityType="Self.saved_business" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="saved_private" EntityType="Self.saved_private" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_info" EntityType="Self.user_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -129,6 +149,8 @@
             <Parameter Name="longitude" Mode="In" Type="Decimal" />
             <Parameter Name="active_mode" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="saved_private" EntityType="BirdTouchDatabaseModelSQLServer.saved_private" />
+          <EntitySet Name="saved_business" EntityType="BirdTouchDatabaseModelSQLServer.saved_business" />
         </EntityContainer>
         <EntityType Name="active_users">
           <Key>
@@ -140,6 +162,24 @@
           <Property Name="location_longitude" Type="Decimal" Precision="11" Scale="8" />
           <Property Name="active_mode" Type="Int32" />
           <Property Name="datetime_last_update" Type="DateTime" Precision="3" annotation:StoreGeneratedPattern="None" Nullable="false" />
+        </EntityType>
+        <EntityType Name="saved_private">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="saved_contact_id" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="saved_business">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="saved_contact_id" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -201,6 +241,26 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="createActiveUser" FunctionName="BirdTouchDatabaseModelSQLServer.Store.createActiveUser" />
           <FunctionImportMapping FunctionImportName="updateActiveUser" FunctionName="BirdTouchDatabaseModelSQLServer.Store.updateActiveUser" />
+          <EntitySetMapping Name="saved_private">
+            <EntityTypeMapping TypeName="BirdTouchDatabaseModelSQLServer.saved_private">
+              <MappingFragment StoreEntitySet="saved_private">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="saved_contact_id" ColumnName="saved_contact_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="saved_business">
+            <EntityTypeMapping TypeName="BirdTouchDatabaseModelSQLServer.saved_business">
+              <MappingFragment StoreEntitySet="saved_business">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="saved_contact_id" ColumnName="saved_contact_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

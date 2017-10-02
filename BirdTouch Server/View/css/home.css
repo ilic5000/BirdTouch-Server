@@ -1,0 +1,79 @@
+body {
+    background-color: lightblue;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.center {
+	
+	margin: auto;
+	max-width:300px;
+	
+}
+
+.borderUpAndDown{
+	border-top:2px solid black;
+	border-bottom: 2px solid black;
+}
+
+.col-centered{
+    text-align:center;
+}
+
+.col-left{
+    text-align:left;
+}
+
+
+.col-right{
+    text-align:right;
+}
+
+.col-right-hello{
+    text-align:right;
+	margin-right: 1%;
+}
+
+
+.private_contacts_table {
+    margin-top:10px;
+}
+.private_contacts_table tr {
+    /*border: 1px solid black;*/
+}
+
+
+.private_contacts_table td {
+    padding-top: 5px;
+    
+}
+
+.business_contacts_table {
+    margin-top:10px;
+
+}
+.business_contacts_table tr {
+    /*border: 1px solid black;*/
+}
+
+
+.business_contacts_table td {
+    padding-top: 5px;
+    
+}
+
+
+a:link {
+    color: #333333;
+}
+
+a:visited {
+    color: #333333;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}

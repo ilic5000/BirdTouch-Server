@@ -142,8 +142,20 @@
       <LastGenOutput>BirdTouchDatabaseModelSQLServer.cs</LastGenOutput>
     </Content>
     <Content Include="Global.asax" />
+    <Content Include="View\css\home.css" />
+    <Content Include="View\home.html" />
+    <Content Include="View\img\blank_navigation.jpg" />
+    <Content Include="View\img\contacts_next.png" />
+    <Content Include="View\img\contacts_previous.png" />
+    <Content Include="View\img\details_down_arrow.png" />
+    <Content Include="View\img\details_up_arrow.png" />
+    <Content Include="View\img\loading.gif" />
+    <Content Include="View\index2.html" />
+    <Content Include="View\index.html" />
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="View\private.html" />
+    <Content Include="View\scripts\BirdTouchHomeScript.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +180,12 @@
       <DependentUpon>BirdTouchDatabaseModelSQLServer.edmx</DependentUpon>
     </Compile>
     <Compile Include="EntityFrameworkModels\business_info.cs">
+      <DependentUpon>BirdTouchDatabaseModelSQLServer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFrameworkModels\saved_business.cs">
+      <DependentUpon>BirdTouchDatabaseModelSQLServer.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFrameworkModels\saved_private.cs">
       <DependentUpon>BirdTouchDatabaseModelSQLServer.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFrameworkModels\users.cs">
@@ -212,6 +230,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="View\scripts\dashboard\bower_components\" />
+    <Folder Include="View\scripts\dashboard\dist\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
