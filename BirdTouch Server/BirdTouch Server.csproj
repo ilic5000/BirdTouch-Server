@@ -132,6 +132,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DatabaseBackup\SQL\createProcedure_createActiveUser.sql" />
+    <Content Include="DatabaseBackup\SQL\createProcedure_updateActiveUser.sql" />
+    <Content Include="DatabaseBackup\SQL\createTables.sql" />
     <Content Include="EntityFrameworkModels\BirdTouchDatabaseModelSQLServer.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>BirdTouchDatabaseModelSQLServer.edmx</DependentUpon>
